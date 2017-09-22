@@ -7,6 +7,8 @@ import android.util.Log;
 
 public class WatsonService extends Service{
 
+	
+	
 	private static final String LOG_TAG = "WatsonService";
 	
 	public WatsonService() {
