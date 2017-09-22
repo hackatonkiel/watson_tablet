@@ -1,15 +1,19 @@
 package de.bewatec.hackerthon.service;
 
-import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
-
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.MediaRecorder.AudioSource;
 import android.os.IBinder;
 import android.util.Log;
 
 public class WatsonService extends Service implements WatsonSpeechToTextListener, WatsonConversationListener, WatsonTextToSpeechListener{
 
+	private AudioRecord audioRecorder;
+	private AudioManager audioManager;
+	
 	
 	protected enum State{
 		IDLE,
@@ -21,16 +25,25 @@ public class WatsonService extends Service implements WatsonSpeechToTextListener
 	
 	
 	private static final String LOG_TAG = "WatsonService";
-	private State currentState = State.IDLE;
 	
 	public WatsonService() {
 		// TODO Auto-generated constructor stub
+		
+	
 	}
 	
 	@Override
 	public void onCreate() {
 		Log.d(LOG_TAG,"Service created");
 		super.onCreate();
+		
+	   audioManager = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+		audioManager.setMicrophoneMute(true);
+		
+		
+		WatsonSpeechToText speechToText = new WatsonSpeechToText();
+		speechToText.startSpeechToText(this);
+		
 	}
 	
 	
